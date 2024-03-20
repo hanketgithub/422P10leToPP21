@@ -67,7 +67,7 @@ int main(int argc, char *argv[])
     // specify output file name
     cp = strrchr(argv[1], '.');
     strncpy(output, argv[1], cp - argv[1]);
-    strcat(output, "_nv20");
+    strcat(output, "_pp21");
     strcat(output, cp);
     
     ofd = open(output, O_RDWR | O_CREAT, S_IRUSR);
