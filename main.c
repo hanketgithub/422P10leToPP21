@@ -2,19 +2,20 @@
 //  main.c
 //  422P10ToPP21
 //
-//  Created by Hank Lee on 2024-03-20.
+//  Created by Hank Lee on 2025-03-05.
 //  Copyright (c) 2024 Hank Lee. All rights reserved.
 //
 
 #include <stdint.h>
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
-#include <unistd.h>
 #include <sys/types.h>
 #include <sys/stat.h>
+#include <sys/time.h>
 #include <fcntl.h>
-#include <string.h>
-#include <stdlib.h>
+#include <unistd.h>
 
 #include "pack.h"
 
@@ -69,12 +70,18 @@ int main(int argc, char *argv[])
     strncpy(output, argv[1], cp - argv[1]);
     strcat(output, "_pp21");
     strcat(output, cp);
-    
-    ofd = open(output, O_RDWR | O_CREAT, S_IRUSR);
+
+    ofd = open
+            (
+             output,
+             O_WRONLY | O_CREAT | O_TRUNC,
+             S_IRUSR
+            );
 
     width   = atoi(argv[2]);
     height  = atoi(argv[3]);
-    wxh     = width * height;
+
+    wxh = width * height;
 
 
     while (1)
@@ -128,14 +135,14 @@ int main(int argc, char *argv[])
                 }
             }
             write(ofd, p, width * height / 4 * sizeof(quatre_pixel));
-            
-            fprintf(stderr, "Frame %d completed.\n", count);
             count++;
         }
         else
         {
             break;
         }
+        fputc('.', stderr);
+        fflush(stderr);
     }
     
     close(ifd);
